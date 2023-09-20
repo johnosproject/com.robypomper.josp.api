@@ -22,26 +22,6 @@ import com.robypomper.build.gradle.GradleBuildInfo
 
 /**
  * Gradle configurations to manage JOSP Commons as java implementations.
- *
- * Components list:
- * <ul>
- *     <li>
- *         JOSP APIs
- *     </li>
- * </ul>
- *
- * Summary:
- * <ul>
- *     <li>
- *         Components configs: sourceSets, configurations, dependencies and BuildInfo
- *     </li>
- *     <li>
- *         Publication configs: component's publications
- *     </li>
- *     <li>
- *         Publication tasks: publication's tasks to local repository
- *     </li>
- * </ul>
  */
 
 
@@ -63,6 +43,7 @@ dependencies {
     jospAPIsImplementation "com.fasterxml.jackson.core:jackson-annotations:${project.ext.get("version.jackson")}"
 }
 
+
 GradleBuildInfo.makeBuildInfoForSourceSet(project, sourceSets.jospAPIs, (String)project.ext.get("version.build.jospAPIs"));
 
 
@@ -70,10 +51,10 @@ GradleBuildInfo.makeBuildInfoForSourceSet(project, sourceSets.jospAPIs, (String)
 // Publication configs
 // -------------------
 
-String jospAPIsName = 'JOSP APIs Library'
-String jospAPIsArtifact = 'jospAPIs'
-String jospAPIsVersion = project.ext.get("version.build.jospAPIs")
-String jospAPIsDescription = "This is the JOSP APIs library from John O.S. Project"
+String jospAPIsName = ext.get('artifactLongName')
+String jospAPIsArtifact = ext.get('artifactName')
+String jospAPIsVersion = ext.get('artifactVersion')
+String jospAPIsDescription = ext.get('artifactDescription')
 def jospAPIsPubDesc = new JavaPublicationUtils.Descriptor(project,sourceSets.jospAPIs,jospAPIsName,jospAPIsArtifact,jospAPIsVersion,jospAPIsDescription)
         .setUrlsFromProject(project)
         .setLicenceGPLv3()
