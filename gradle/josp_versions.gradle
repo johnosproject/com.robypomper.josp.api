@@ -96,8 +96,8 @@ ext {
 
 //@formatter:off
 ext {
-    set('version.slf4j'             , '1.7.30')
-    set('version.lombok'            , '1.18.12')
-    set('version.jackson'           , '2.10.2')
+    set('version.slf4j'             , '2.0.9')
+    set('version.lombok'            , '1.18.28')
+    set('version.jackson'           , '2.15.2')
 }
 //@formatter:on
