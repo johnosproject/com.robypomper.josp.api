@@ -17,19 +17,273 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  ******************************************************************************/
 
-package com.robypomper.build.gradle;
+/**
+ * Project's artifacts' definitions from their sourceSets until their publications.
+ *
+ * Artifacts configured:
+ * - jospAPI: sourceSet.main
+ *
+ * Summary:
+ * - Sources configs
+ * - Publication configs
+ * - Utils methods
+ */
 
-import com.robypomper.build.commons.Naming;
-import org.gradle.api.Project;
-import org.gradle.api.tasks.SourceSet;
+final String CLASSIFIER_DOC = "javadoc"
+final String CLASSIFIER_SRC = "sources"
+final String CLASSIFIER_DEP = "deps"
+final String CLASSIFIER_FAT = "fat"
 
-import java.io.*;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.Map;
-import java.util.TimeZone;
 
-public class GradleBuildInfo {
+// ------------------
+// Components configs
+// ------------------
+
+sourceSets {}
+
+configurations {}
+
+dependencies {
+    implementation "org.slf4j:slf4j-api:${project.ext.get("version.slf4j")}"
+    compileOnly "org.projectlombok:lombok:${project.ext.get("version.lombok")}"                                 // Lombok annotations
+    annotationProcessor "org.projectlombok:lombok:${project.ext.get("version.lombok")}"
+    implementation "com.fasterxml.jackson.core:jackson-databind:${project.ext.get("version.jackson")}"
+    implementation "com.fasterxml.jackson.core:jackson-annotations:${project.ext.get("version.jackson")}"
+}
+
+GradleBuildInfo.makeBuildInfoForSourceSet(project, sourceSets.main, (String)project.ext.get("artifactVersion"));
+
+
+// -------------------
+// Publication configs
+// -------------------
+
+String pubName = ext.get('artifactLongName')
+String pubArtifact = ext.get('artifactName')
+String pubDescription = ext.get('artifactDescription')
+String pubGroupId = ext.get('artifactGroupId')
+String pubVersion = ext.get('artifactVersion')
+String pubUrl = ext.get('projectUrl')
+String pubGit = ext.get('projectGit')
+String pubGitUrl = ext.get('projectGitUrl')
+String pubLicence = ext.get('artifactLicence')
+String pubLicenceUrl = ext.get('artifactLicenceUrl')
+String pubMainClass = hasProperty('artifactMainClass') ? ext.get('artifactMainClass') : null
+SourceSet pubSourcesSet = sourceSets.main
+
+tasks.jar {
+    archiveBaseName = pubArtifact
+    archiveVersion = pubVersion
+
+    getManifest().attributes(prepareManifestAttributes(pubSourcesSet, pubName, pubVersion, pubLicence, pubLicenceUrl, pubMainClass, ""))
+}
+
+tasks.register("jarDeps", org.gradle.jvm.tasks.Jar.class) {
+    setGroup(BasePlugin.BUILD_GROUP)
+    archiveBaseName = pubArtifact
+    archiveVersion = pubVersion
+    archiveClassifier = CLASSIFIER_DEP
+
+    List<File> fs = new ArrayList<>()
+    for (File f : pubSourcesSet.getRuntimeClasspath())
+        if (f.exists() && !f.isDirectory())
+            fs.add(f)
+    from(fs)
+
+    getManifest().attributes(prepareManifestAttributes(pubSourcesSet, pubName, pubVersion, pubLicence, pubLicenceUrl, pubMainClass, ""))
+}
+
+tasks.javadoc {
+    setTitle(String.format("%s JavaDocs", capitalizeName(pubName)))
+
+    FileCollection classPath = it.getClasspath()
+    classPath = classPath + pubSourcesSet.getRuntimeClasspath()
+    classPath = classPath + project.files(pubSourcesSet.getCompileClasspath().getFiles())
+    classPath = classPath + pubSourcesSet.getAnnotationProcessorPath()
+    setClasspath(classPath)
+
+    setFailOnError(false)
+
+    enabled = !project.ext.get("disableDocs")
+}
+
+tasks.register("jarDocs", org.gradle.jvm.tasks.Jar.class) {
+    setGroup(BasePlugin.BUILD_GROUP)
+    archiveBaseName = pubArtifact
+    archiveVersion = pubVersion
+    archiveClassifier = CLASSIFIER_DOC
+
+    from(tasks.javadoc.getOutputs())
+
+    enabled = !project.ext.get("disableDocs")
+
+    getManifest().attributes(prepareManifestAttributes(pubSourcesSet, pubName, pubVersion, pubLicence, pubLicenceUrl, pubMainClass, ""))
+}
+
+tasks.register("jarSrc", org.gradle.jvm.tasks.Jar.class) {
+    setGroup(BasePlugin.BUILD_GROUP)
+    archiveBaseName = pubArtifact
+    archiveVersion = pubVersion
+    archiveClassifier = CLASSIFIER_SRC
+
+    from(pubSourcesSet.getAllSource())
+
+    getManifest().attributes(prepareManifestAttributes(pubSourcesSet, pubName, pubVersion, pubLicence, pubLicenceUrl, pubMainClass, ""))
+}
+
+publishing {
+    publications {
+        "$pubArtifact"(MavenPublication) {
+            groupId = pubGroupId
+            artifactId = pubArtifact
+            version = pubVersion
+
+            artifact jar
+            artifact jarDeps
+            artifact jarDocs
+            artifact jarSrc
+        }
+    }
+}
+
+def pub_pom = publishing.publications."$pubArtifact".getPom()
+initPom(pub_pom, pubName, pubDescription, pubUrl, pubGit, pubGitUrl, pubLicence, pubLicenceUrl)
+Configuration pub_configs = configurations.getByName(pubSourcesSet.getImplementationConfigurationName())
+injectDependenciesToPom(pub_pom, pub_configs, true)
+
+
+/**********************************************************************************************************************
+ **********************************************************************************************************************/
+
+// -------------
+// Utils methods
+// -------------
+
+import groovy.xml.QName
+import java.text.SimpleDateFormat
+
+static Map<String, String> prepareManifestAttributes(SourceSet sourceSet, String name, String version, String licence, String licenceUrl, String mainClass, String nameExtension) {
+    //@formatter:off
+    Map<String, String> res = new HashMap<>()
+    res.put("Implementation-Title"      , name + (nameExtension.isEmpty() ? "" : " - " + capitalizeName(nameExtension)))
+    res.put("Implementation-Version"    , version)
+    res.put("Implementation-Variant"    , (nameExtension.isEmpty() ? "default" : " - " + capitalizeName(nameExtension)))
+
+    res.put("Licence"                   , licence)
+    res.put("Licence-Url"               , licenceUrl)
+
+    if (mainClass != null)
+        res.put("Main-Class"            , mainClass)
+
+    res.put("Built-By"                  , System.getProperty("user.name"))
+    res.put("Build-Timestamp"           , new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ").format(new Date()))
+    res.put("Created-By"                , String.format("Gradle %s", System.getProperty("gradle.gradleVersion}")))
+    res.put("Build-Jdk"                 , String.format("%s (%s %s)", System.getProperty("java.version"), System.getProperty("java.vendor"), System.getProperty("java.vm.version")))
+    res.put("Build-OS"                  , String.format("%s %s %s", System.getProperty("os.name"), System.getProperty("os.arch"), System.getProperty("os.version")))
+    StringBuilder classPath = new StringBuilder()
+    for (File f : sourceSet.getRuntimeClasspath().getFiles())
+        if (f.getName().endsWith(".jar"))
+            classPath.append(String.format("libs/%s ", f.getName()))
+    res.put("Class-Path"                , classPath.toString())
+
+    //res.put("Build-Revision"            : versioning.info.commit)
+    //@formatter:on
+    return res
+}
+
+static void initPom(MavenPom pom, String name, String description,
+                    String url, String urlGit, String urlGitRepo) {
+    initPom(pom, name, description, url, urlGit, urlGitRepo, null, null);
+}
+
+static void initPom(MavenPom pom, String name, String description,
+                    String url, String urlGit, String urlGitRepo,
+                    String licence, String urlLicence) {
+
+    pom.getName().set(name);
+    pom.getDescription().set(description);
+    pom.getUrl().set(url);
+
+    pom.licenses(new Action<MavenPomLicenseSpec>() {
+        @Override
+
+        public void execute(MavenPomLicenseSpec mavenPomLicenseSpec) {
+            mavenPomLicenseSpec.license(new Action<MavenPomLicense>() {
+                @Override
+                public void execute(MavenPomLicense mavenPomLicense) {
+                    if (licence != null) mavenPomLicense.getName().set(licence);
+                    if (urlLicence != null) mavenPomLicense.getUrl().set(urlLicence);
+                }
+            });
+        }
+    });
+
+    pom.developers(new Action<MavenPomDeveloperSpec>() {
+        @Override
+        public void execute(MavenPomDeveloperSpec mavenPomDeveloperSpec) {
+            mavenPomDeveloperSpec.developer(new Action<MavenPomDeveloper>() {
+                @Override
+                public void execute(MavenPomDeveloper mavenPomDeveloper) {
+                    mavenPomDeveloper.getId().set("robypomper");
+                    mavenPomDeveloper.getName().set("Roberto Pompermaier");
+                    mavenPomDeveloper.getEmail().set("robypomper@johnosproject.com");
+                }
+            });
+        }
+    });
+
+
+    pom.scm(mavenPomScm -> {
+        mavenPomScm.getConnection().set(String.format("scm:git:https://%s", urlGit));
+        mavenPomScm.getDeveloperConnection().set(String.format("scm:git:ssh://%s", urlGit));
+        mavenPomScm.getUrl().set(urlGitRepo);
+    });
+
+}
+
+static void injectDependenciesToPom(MavenPom pom, Configuration fromConfig, boolean preClean) {
+    pom.withXml(xmlProvider -> {
+        Node dependenciesNode = null;
+        try {
+            dependenciesNode = (Node) xmlProvider.asNode().getAt(new QName("dependencies")).get(0);
+        } catch (IndexOutOfBoundsException ignore) {
+        }
+        if (dependenciesNode == null) dependenciesNode = xmlProvider.asNode().appendNode(new QName("dependencies"));
+        final Node dependenciesNodeFinal = dependenciesNode;
+
+        if (preClean)
+            dependenciesNodeFinal.setValue("");
+
+        fromConfig.getAllDependencies().forEach(it -> {
+            if (it instanceof ExternalModuleDependency) {
+                Node dependencyNode = dependenciesNodeFinal.appendNode("dependency");
+                dependencyNode.appendNode("groupId", it.getGroup());
+                dependencyNode.appendNode("artifactId", it.getName());
+                dependencyNode.appendNode("version", it.getVersion());
+            }
+        });
+    });
+}
+
+static void clearAllDependenciesToPom(MavenPom pom) {
+    pom.withXml(xmlProvider -> {
+        Node dependenciesMngrNode = (Node) xmlProvider.asNode().getAt(new QName("dependencyManagement")).get(0);
+        if (dependenciesMngrNode == null)
+            dependenciesMngrNode = xmlProvider.asNode().appendNode(new QName("dependencyManagement"));
+
+        Node dependenciesNode = (Node) dependenciesMngrNode.getAt(new QName("dependencies")).get(0);
+        if (dependenciesNode == null) dependenciesNode = dependenciesMngrNode.appendNode(new QName("dependencies"));
+        final Node dependenciesNodeFinal = dependenciesNode;
+
+        dependenciesNodeFinal.setValue("");
+    });
+}
+
+static String capitalizeName(String str) {
+    return str.substring(0, 1).toUpperCase() + str.substring(1);
+}
+
+class GradleBuildInfo {
 
     private static final String GENERATED_SOURCE_PATH = "%s/build/generated/sources/buildInfo/java/%s/%s";
     private static final String GENERATED_RESOURCE_PATH = "%s/build/generated/resources/buildInfo/java/%s/%s";
@@ -112,7 +366,7 @@ public class GradleBuildInfo {
 
         try {
             saveFile(new File(generatedSourcePath(project, ss, "BuildInfo.java")), CLASS_BUILD_INFO);
-            saveFile(new File(generatedSourcePath(project, ss, String.format("BuildInfo%s.java", Naming.capitalize(ss.getName())))), genSourceCode);
+            saveFile(new File(generatedSourcePath(project, ss, String.format("BuildInfo%s.java", capitalizeName(ss.getName())))), genSourceCode);
             ss.getJava().srcDir(generatedSourcePath(project, ss, ""));
         } catch (IOException e) {
             e.printStackTrace();
@@ -202,7 +456,7 @@ public class GradleBuildInfo {
     }
 
     private static String generateSourceCode(SourceSet ss) {
-        return String.format(CLASS_TMPL, ss.getName(), Naming.capitalize(ss.getName()));
+        return String.format(CLASS_TMPL, ss.getName(), capitalizeName(ss.getName()));
     }
 
     private static void saveFile(File file, String genSourceCode) throws IOException {
@@ -232,6 +486,10 @@ public class GradleBuildInfo {
             cmdOutput.append(line);
         }
         return cmdOutput.toString();
+    }
+
+    static String capitalizeName(String str) {
+        return str.substring(0, 1).toUpperCase() + str.substring(1);
     }
 
 }

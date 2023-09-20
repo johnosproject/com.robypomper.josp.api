@@ -17,31 +17,17 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  ******************************************************************************/
 
-package com.robypomper.build.commons;
-
 /**
- * Utils class for naming management.
+ * Add a simple <code>wrapper</code> task to generate a Gradle wrapper.
+ *
+ * If set, it use the <code>gradleWrapperVersion</code> property as Gradle
+ * wrapper's version.
  */
-public class Naming {
 
-    /**
-     * Capitalize given string.
-     *
-     * @param str string to capitalize
-     * @return capitalized string
-     */
-    static public String capitalize(String str) {
-        return str.substring(0, 1).toUpperCase() + str.substring(1);
+
+if (tasks.named("wrapper")==null)
+    tasks.register("wrapper", Wrapper) {
+        if (hasProperty('gradleWrapperVersion'))
+            gradleVersion = ext.get('gradleWrapperVersion')
+        distributionType = Wrapper.DistributionType.ALL
     }
-
-    /**
-     * Minuscule given string.
-     *
-     * @param str string to minuscule
-     * @return minusculed string
-     */
-    static public String minuscule(String str) {
-        return str.substring(0, 1).toLowerCase() + str.substring(1);
-    }
-
-}
