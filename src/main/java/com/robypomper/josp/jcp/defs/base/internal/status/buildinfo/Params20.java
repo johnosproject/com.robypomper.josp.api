@@ -20,7 +20,9 @@
 package com.robypomper.josp.jcp.defs.base.internal.status.buildinfo;
 
 
+import java.util.Date;
 import java.util.HashMap;
+import java.util.Map;
 
 /**
  * JCP All - Status / Build Info 2.0
@@ -29,29 +31,53 @@ public class Params20 {
 
     // Build Info methods
 
-    public static class BuildInfo extends com.robypomper.BuildInfo {
+    public static class BuildInfo extends com.robypomper.josp.api.BuildInfoJospAPI {
 
-        public static BuildInfo clone(com.robypomper.BuildInfo other) {
+        public static BuildInfo clone(com.robypomper.josp.api.BuildInfoJospAPI other) {
             BuildInfo bi = new BuildInfo();
             bi.project = other.project;
-            bi.sourceSet = other.sourceSet;
+            bi.url = other.url;
             bi.version = other.version;
-            bi.versionBuild = other.versionBuild;
+
+            bi.artifactGroupId = other.artifactGroupId;
+            bi.artifactName = other.artifactName;
+            bi.artifactVersion = other.artifactVersion;
+            bi.artifactLongName = other.artifactLongName;
+            bi.artifactDescription = other.artifactDescription;
+            bi.artifactMainClass = other.artifactMainClass;
+            bi.artifactLicence = other.artifactLicence;
+            bi.artifactLicenceUrl = other.artifactLicenceUrl;
+
+            bi.jospMode = other.jospMode;
+            bi.enablePrivate = other.enablePrivate;
+            bi.OVERRIDE_enablePrivate = other.OVERRIDE_enablePrivate;
+            bi.OVERRIDE_jospBuildVersion = other.OVERRIDE_jospBuildVersion;
+            bi.OVERRIDE_jospBuildClassifier = other.OVERRIDE_jospBuildClassifier;
+            bi.OVERRIDE_jospDependenciesVersion = other.OVERRIDE_jospDependenciesVersion;
+            bi.disableDocs = other.disableDocs;
+            bi.OVERRIDE_disableDocs = other.OVERRIDE_disableDocs;
+
+            bi.buildVersion = other.buildVersion;
             bi.buildTime = other.buildTime;
-            bi.javaVersion = other.javaVersion;
-            bi.javaHome = other.javaHome;
-            bi.gradleVersion = other.gradleVersion;
+            bi.buildJavaVersion = other.buildJavaVersion;
+            bi.buildJavaHome = other.buildJavaHome;
+            bi.buildGradleVersion = other.buildGradleVersion;
+            bi.buildUser = other.buildUser;
+            bi.buildOsName = other.buildOsName;
+            bi.buildOsVersion = other.buildOsVersion;
+            bi.buildOsArch = other.buildOsArch;
+
+            bi.gitRepo = other.gitRepo;
+            bi.gitUrl = other.gitUrl;
             bi.gitCommit = other.gitCommit;
             bi.gitCommitShort = other.gitCommitShort;
             bi.gitBranch = other.gitBranch;
-            bi.user = other.user;
-            bi.osName = other.osName;
-            bi.osVersion = other.osVersion;
-            bi.osArch = other.osArch;
-            if (other.extra!=null)
+
+            bi.buildInfoVersion = other.buildInfoVersion;
+
+            if (other.extra != null)
                 bi.extra = new HashMap<>(other.extra);
             return bi;
         }
     }
-
 }
