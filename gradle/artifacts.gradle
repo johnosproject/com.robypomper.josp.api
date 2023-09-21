@@ -44,8 +44,7 @@ sourceSets {}
 configurations {}
 
 dependencies {
-    implementation "org.slf4j:slf4j-api:${project.ext.get("version.slf4j")}"
-    compileOnly "org.projectlombok:lombok:${project.ext.get("version.lombok")}"                                 // Lombok annotations
+    compileOnly "org.projectlombok:lombok:${project.ext.get("version.lombok")}"
     annotationProcessor "org.projectlombok:lombok:${project.ext.get("version.lombok")}"
     implementation "com.fasterxml.jackson.core:jackson-databind:${project.ext.get("version.jackson")}"
     implementation "com.fasterxml.jackson.core:jackson-annotations:${project.ext.get("version.jackson")}"
@@ -185,6 +184,7 @@ static Map<String, String> prepareManifestAttributes(SourceSet sourceSet, String
         if (f.getName().endsWith(".jar"))
             classPath.append(String.format("libs/%s ", f.getName()))
     res.put("Class-Path"                , classPath.toString())
+    res.put("Multi-Release"             , "true")
 
     //res.put("Build-Revision"            : versioning.info.commit)
     //@formatter:on
