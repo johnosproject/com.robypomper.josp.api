@@ -39,7 +39,7 @@ public class Paths20 {
 
     //@formatter:off
     public static final String PARAM_OBJ        = "obj_id";
-    public static final String PARAM_PERM       = "comp_path";
+    public static final String PARAM_PERM       = "perm_id";
 
     public static final String PARAM_URL_OBJ        = "{" + PARAM_OBJ + "}";
     public static final String PARAM_URL_PERM       = "{" + PARAM_PERM + "}";

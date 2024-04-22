@@ -2,23 +2,31 @@
  * The John Operating System Project is the collection of software and configurations
  * to generate IoT EcoSystem, like the John Operating System Platform one.
  * Copyright (C) 2021 Roberto Pompermaier
- *
+ * <p>
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * any later version.
- *
+ * <p>
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- *
+ * <p>
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  ******************************************************************************/
 
 package com.robypomper.josp.types.josp;
 
+
+/**
+ * JOD event types are the Events emitted by the JOD or JSL instances and
+ * collected as instance Events.
+ * <p>
+ * The instance Events are stored locally and can be sync with the JCP.
+ */
+@SuppressWarnings("unused")
 public enum EventType {
 
     /**
@@ -95,8 +103,6 @@ public enum EventType {
      *
      * <pre>
      *     {"phase": "Comm Cloud Connected", "connected": "true", "url": "MBP-di-Roberto.station", "ip": "192.168.1.4", "port": "9110", "client": {"id": "SXTTO-TCIJE-CDZYC", "url": "mbp-di-roberto.station", "ip": "192.168.1.4", "port": "65103"}}
-     *
-     *     TODO
      * </pre>
      */
     JOD_COMM_CLOUD_CONN,
@@ -115,7 +121,7 @@ public enum EventType {
      * Event emitted on Local Server startup.
      * <p>
      * When the JOD runs his server for local service connections, it emits
-     * this events. The local server startup in two process:
+     * these events. The local server startup in two process:
      * <ul>
      *     <li>server initialization and listening</li>
      *     <li>server publication on local network</li>
@@ -131,7 +137,7 @@ public enum EventType {
      * Event emitted on Local Server startup.
      * <p>
      * When the JOD stops his server for local service connections, it emits
-     * this events. The local server stops in two process:
+     * these events. The local server stops in two process:
      * <ul>
      *     <li>server shutdown</li>
      *     <li>server de-publication from local network</li>
@@ -147,7 +153,7 @@ public enum EventType {
      * Event emitted when a Local Service connects to Local Server startup.
      * <p>
      * When a JSL service connects locally to the current JOD instance, JOD
-     * emits this events. When the received connection is from an "already
+     * emits these events. When the received connection is from an "already
      * connected" service the event's phase is set to 'Local JSL refused
      * connection because already connected service'.
      * <p>
@@ -171,7 +177,7 @@ public enum EventType {
      * Event emitted when a Local Service disconnects from Local Server startup.
      * <p>
      * When a JSL service disconnect from current JOD instance, JOD
-     * emits this events. This event is emitted only when the service lost
+     * emits these events. This event is emitted only when the service lost
      * the connection with the object (no other connections available).
      * <p>
      * In the payload this event contains two clients info:
@@ -296,9 +302,9 @@ public enum EventType {
      * emits this event.
      * This event contains the action requester info.
      *
-     * <code>
+     * <pre>
      * {"srvId": "jcp-fe", "usrId": "3d6bd9ed-8d63-43d6-a465-dbe9029e04c8", "connType": "LocalAndCloud", "component": "Light example&gt;Switch", "command": "JOSPBoolean"}
-     * </code>
+     * </pre>
      */
     JOD_ACTION_EXEC
 

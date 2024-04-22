@@ -37,7 +37,7 @@ public class Versions extends APIVersionsAbs {
     // API SubGroups
     public static final String API_GROUP = "Main";
     public static final String API_GROUP_FULL = "";
-    public static final String API_GROUP_DESCR = "";;
+    public static final String API_GROUP_DESCR = "";
     // Urls
     public static final String API_PATH_BASE = "/apis/josp/admin";
     public static final String AUTH_PATH_BASE = "/auth";

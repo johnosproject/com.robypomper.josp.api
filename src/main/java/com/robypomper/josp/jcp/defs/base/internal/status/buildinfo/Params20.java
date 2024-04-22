@@ -20,9 +20,7 @@
 package com.robypomper.josp.jcp.defs.base.internal.status.buildinfo;
 
 
-import java.util.Date;
 import java.util.HashMap;
-import java.util.Map;
 
 /**
  * JCP All - Status / Build Info 2.0

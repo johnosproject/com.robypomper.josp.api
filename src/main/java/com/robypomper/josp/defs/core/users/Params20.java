@@ -37,7 +37,7 @@ public class Params20 {
         public boolean maker;
         public boolean developer;
 
-        public static User ANONYMOUS;
+        public static final User ANONYMOUS;
 
         static {
             ANONYMOUS = new User();

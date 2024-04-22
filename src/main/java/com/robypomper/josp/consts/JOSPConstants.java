@@ -32,6 +32,6 @@ public class JOSPConstants {
     public static final String API_HEADER_USR_ID = "User-ID";
 
 
-    public static int BYTE_TRANSFORM = 1024 * 1024;;
+    public static final int BYTE_TRANSFORM = 1024 * 1024;
 
 }

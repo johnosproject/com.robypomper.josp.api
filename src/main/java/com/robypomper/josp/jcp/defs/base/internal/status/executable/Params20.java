@@ -183,7 +183,7 @@ public class Params20 {
         public final int threadsCountDaemon;
         public final int threadsCountPeak;
         public final long threadsCountStarted;
-        public List<RESTItemList> threadsList;
+        public final List<RESTItemList> threadsList;
 
         public JavaThreads() {
             threadsList = new ArrayList<>();
@@ -296,7 +296,7 @@ public class Params20 {
 
     public static class Disks {
 
-        public List<RESTItemList> disksList;
+        public final List<RESTItemList> disksList;
 
         public Disks() {
             disksList = new ArrayList<>();
@@ -306,9 +306,7 @@ public class Params20 {
                 disk.name = root.toString();
                 try {
                     disk.url = Paths20.FULL_PATH_EXEC_DISK(URLEncoder.encode(root.toString(), StandardCharsets.UTF_8.toString()));
-                } catch (UnsupportedEncodingException e) {
-                    e.printStackTrace();
-                }
+                } catch (UnsupportedEncodingException ignore) {}
                 disksList.add(disk);
             }
         }
@@ -355,10 +353,10 @@ public class Params20 {
             try {
                 intfs = Collections.list(NetworkInterface.getNetworkInterfaces());
 
-            } catch (SocketException e) {
-                e.printStackTrace();
-                throw new RuntimeException(e);
+            } catch (SocketException ignore) {
+                return;
             }
+
             networksList = new ArrayList<>();
             for (NetworkInterface netIntf : intfs) {
                 RESTItemList intf = new RESTItemList();

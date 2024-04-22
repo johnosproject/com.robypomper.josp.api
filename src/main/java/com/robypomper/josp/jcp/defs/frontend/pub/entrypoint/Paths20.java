@@ -39,8 +39,8 @@ public class Paths20 {
 
     //@formatter:off
     //
-    private static final String MTHD_ENTRYPOINT = "/entrypoint";
-    private static final String MTHD_INIT_JSL_SESSION = "/jslwbsession";
+    private static final String MTHD_ENTRYPOINT = "entrypoint";
+    private static final String MTHD_INIT_JSL_SESSION = "jslwbsession";
     //@formatter:on
 
 
@@ -57,8 +57,8 @@ public class Paths20 {
 
     //@formatter:off
     //
-    public static final String DESCR_PATH_ENTRYPOINT        = "Return the JSL Web Bridge entry point";
-    public static final String DESCR_PATH_INIT_JSL_SESSION  = "Require to JSL Web Bridge to initialize a JSL instance";
+    public static final String DESCR_PATH_ENTRYPOINT        = "Return the FrontEnd entry point";
+    public static final String DESCR_PATH_INIT_JSL_SESSION  = "Require to FrontEnd to initialize a JSL instance";
     //@formatter:on
 
 }
