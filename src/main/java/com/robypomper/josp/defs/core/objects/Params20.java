@@ -39,7 +39,7 @@ public class Params20 {
 
     // History
 
-    public static class HistoryStatus {
+    public static class HistoryMessage {
 
         public long id;
         public String compPath;
