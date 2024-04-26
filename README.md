@@ -1,16 +1,19 @@
-# JOSP Core API
+# JOSP API
 
-Into this repository are contained all sources for the JOSP Core API library
-from the [John O.S. Project](https://www.johnosproject.com)
+Into this repository are contained all sources for the JOSP API and constants
+definitions from the [John O.S. Project](https://www.johnosproject.com)
 
 **Artifact Name:** jospAPI<br />
 **Artifact Group:** com.robypomper.josp<br />
 **Artifact Version:** 2.2.4
 
-[README](README.md) | [CHANGELOG](CHANGELOG.md) | [TODOs](TODOs.md) | [LICENCE](LICENCE.md)
+[README](README.md) | [SPECS](docs/specs.md) | [CHANGELOG](CHANGELOG.md) | [TODOs](TODOs.md) | [LICENCE](LICENCE.md)
 
-The JOSP Core API is a simple software library that define names, values,
-constants, templates, etc... for the whole JOSP project.
+
+The JOSP API is a simple software library that define names, values,
+constants, templates, etc... for the whole JOSP project. More info about the
+provided constants and data structures from the JOSP API can be found on his
+[specs](docs/specs.md) page.
 
 
 ## Import
@@ -34,7 +37,7 @@ you can find all published versions and other import example for different build
 
 ### Logging
 
-This library is based on the XY logging system...
+This library do not use any logging system.
 
 
 ## Develop
@@ -100,14 +103,26 @@ this repo at [Resources > Publication repo](#publication-repository) section.
 
 ### Tests
 
-N/A
+This repository do not contain any test.
 
 
 ## Resources
 
 ### Dependencies
 
-This repo is part of the...
+This repo is part of the [John OS Project](https://www.johnosproject.com). This is the top level
+repository for all JOSP components. That means this repository do not have any
+dependencies to other JOSP components.
+
+As external dependencies, this repo depends on the [ProjectLombok](https://projectlombok.org/)
+to define POJO classes. This dependency is defined only for annotations and
+compile time.
+
+Actually, it depends also on the [Jackson](https://github.com/FasterXML/jackson)
+library (`jackson-databind` and `jackson-annotations` packages). But, in future
+releases, it will be removed.
+
+Dependencies' licences are listed at the [LICENCE_OTHER](LICENCE_OTHER.md) file.
 
 ### Publication repository
 
@@ -164,7 +179,7 @@ Previous versions are hosted on [com.robypomper.josp]() Git repository.
 
 ## Licences
 
-The JOSP Core API contained in the current repository is distributed using the
+The JOSP API contained in the current repository is distributed using the
 [GPL v3](LICENCE.md) licence.
 
 
@@ -174,6 +189,9 @@ The JOSP Core API contained in the current repository is distributed using the
 are happy to share our experience with other developers, makers and users. Bug
 reporting, extension development, documentation and guides etc... are activities
 where anybody can help to improve this project.
+
+Every contribution, with the aim of creating a healthy community, will be subject
+to the [Code of Conduct](CODE_OF_CONDUCT.md).
 
 One of the John O.S. Project’s goals is to release more John Objects Utils & Apps
 to allow connecting even more connected objects from other standards and protocols.

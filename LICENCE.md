@@ -1,6 +1,7 @@
-# JOSP API LICENCE
+# JOSP API - Licence
 
-[README](README.md) | [CHANGELOG](CHANGELOG.md) | [TODOs](TODOs.md) | [LICENCE](LICENCE.md)
+[README](README.md) | [SPECS](docs/specs.md) | [CHANGELOG](CHANGELOG.md) | [TODOs](TODOs.md) | [LICENCE](LICENCE.md)
+
 
 The John Operating System Project is the collection of software and configurations
 to generate IoT EcoSystem, like the John Operating System Platform one.
