@@ -1,7 +1,7 @@
 /*******************************************************************************
  * The John Operating System Project is the collection of software and configurations
  * to generate IoT EcoSystem, like the John Operating System Platform one.
- * Copyright (C) 2021 Roberto Pompermaier
+ * Copyright (C) 2024 Roberto Pompermaier
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -39,7 +39,7 @@ public class Paths20 {
 
     //@formatter:off
     public static final String PARAM_OBJ        = "obj_id";
-    public static final String PARAM_PERM       = "comp_path";
+    public static final String PARAM_PERM       = "perm_id";
 
     public static final String PARAM_URL_OBJ        = "{" + PARAM_OBJ + "}";
     public static final String PARAM_URL_PERM       = "{" + PARAM_PERM + "}";

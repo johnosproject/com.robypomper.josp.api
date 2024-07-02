@@ -1,7 +1,7 @@
 /*******************************************************************************
  * The John Operating System Project is the collection of software and configurations
  * to generate IoT EcoSystem, like the John Operating System Platform one.
- * Copyright (C) 2021 Roberto Pompermaier
+ * Copyright (C) 2024 Roberto Pompermaier
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -20,9 +20,7 @@
 package com.robypomper.josp.jcp.defs.base.internal.status.buildinfo;
 
 
-import java.util.Date;
 import java.util.HashMap;
-import java.util.Map;
 
 /**
  * JCP All - Status / Build Info 2.0
