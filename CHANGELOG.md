@@ -1,8 +1,17 @@
-# JOSP API Changelog
+# JOSP API - Changelog
 
-[README](README.md) | [CHANGELOG](CHANGELOG.md) | [TODOs](TODOs.md) | [LICENCE](LICENCE.md)
+[README](README.md) | [SPECS](docs/specs.md) | [CHANGELOG](CHANGELOG.md) | [TODOs](TODOs.md) | [LICENCE](LICENCE.md)
 
-## Isolate JOSP API
+
+## Version 2.2.4
+
+* Improved the JOSP API documentation
+* Removed slf4j-api dependency
+* Updated GradleBuildInfo to version 2
+* JCP API
+  * Renamed wrong STATUS names to STATE
+
+## Isolate JOSP API 2.2.3
 
 * Removed all NOT JOSP API files
 * Moved required files to jospApis sourceSet

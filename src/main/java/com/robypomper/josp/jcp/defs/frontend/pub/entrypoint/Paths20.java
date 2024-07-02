@@ -1,7 +1,7 @@
 /*******************************************************************************
  * The John Operating System Project is the collection of software and configurations
  * to generate IoT EcoSystem, like the John Operating System Platform one.
- * Copyright (C) 2021 Roberto Pompermaier
+ * Copyright (C) 2024 Roberto Pompermaier
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -39,8 +39,8 @@ public class Paths20 {
 
     //@formatter:off
     //
-    private static final String MTHD_ENTRYPOINT = "/entrypoint";
-    private static final String MTHD_INIT_JSL_SESSION = "/jslwbsession";
+    private static final String MTHD_ENTRYPOINT = "entrypoint";
+    private static final String MTHD_INIT_JSL_SESSION = "jslwbsession";
     //@formatter:on
 
 
@@ -57,8 +57,8 @@ public class Paths20 {
 
     //@formatter:off
     //
-    public static final String DESCR_PATH_ENTRYPOINT        = "Return the JSL Web Bridge entry point";
-    public static final String DESCR_PATH_INIT_JSL_SESSION  = "Require to JSL Web Bridge to initialize a JSL instance";
+    public static final String DESCR_PATH_ENTRYPOINT        = "Return the FrontEnd entry point";
+    public static final String DESCR_PATH_INIT_JSL_SESSION  = "Require to FrontEnd to initialize a JSL instance";
     //@formatter:on
 
 }
